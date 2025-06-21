@@ -97,7 +97,7 @@ async def forecast_command(message: Message):
     response = await get_forecast(chat_id)
     if response["status"] != "OK":
         if response["info"] == "user_not_found":
-            await message.answer("I don't see you in my database🔍 \n Type /start to register")
+            await message.answer("I don't see you in my database🔍 \nType /start to register")
         else:
             await message.answer("Something went wrong☹️️")
             log.error(response["info"])
@@ -126,11 +126,13 @@ async def delete_command(message: Message):
     chat_id = str(message.chat.id)
     data = get_user(chat_id)
     if data is None:
-        await message.answer("I don't see you in my database🔍 \nType /start to register")
+        await message.answer("I don't see you in my database🔍\nType /start to register")
     else:
         delete_user(chat_id)
         if data[-1]:
             scheduler.remove_job(chat_id)
+        if os.path.isfile(os.path.join('graphs',f'{chat_id}.png')):
+            os.remove(os.path.join('graphs',f'{chat_id}.png'))
         await message.answer("Deleted🗑")
 
 @dp.message(Command('updateme'))
@@ -138,11 +140,13 @@ async def update_command(message: Message):
     chat_id = str(message.chat.id)
     data = get_user(chat_id)
     if data is None:
-        await message.answer("I don't see you in my database🔍 \nType /start to register")
+        await message.answer("I don't see you in my database🔍\nType /start to register")
     else:
         delete_user(chat_id)
         if data[-1]:
             scheduler.remove_job(chat_id)
+        if os.path.isfile(os.path.join('graphs',f'{chat_id}.png')):
+            os.remove(os.path.join('graphs',f'{chat_id}.png'))
         await message.answer(text=start_text, reply_markup=kb_loc_options.as_markup())
 
 @dp.message(Command('changetime'))
@@ -151,7 +155,7 @@ async def change_time_command(message: Message, state: FSMContext):
     data = get_user(chat_id)
     if data is None:
         await state.clear()
-        await message.answer("I don't see you in my database🔍 \n Type /start to register")
+        await message.answer("I don't see you in my database🔍\n Type /start to register")
     else:
         delete_user(chat_id)
         scheduler.remove_job(chat_id)
@@ -166,7 +170,7 @@ async def start_command(message: Message):
     if data is None:
         await message.answer(text=start_text, reply_markup=kb_loc_options.as_markup())
     else:
-        await message.answer(text="You're already registered.\n Type \deleteme to start anew.")
+        await message.answer(text="You're already registered.\nType \deleteme to start anew.")
 
 @dp.callback_query(F.data == 'send_loc')
 async def handle_send_loc_1(cb: CallbackQuery):
