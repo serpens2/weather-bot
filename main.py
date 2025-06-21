@@ -1,4 +1,3 @@
-# change DB_HOST to 'localhost' in .env when running outside of Docker
 from utils import (get_loc_by_city, get_offset_by_loc, add_user,
                    delete_user, get_user, make_forecast, clear_graphs,
                    get_my_offset, with_db)
