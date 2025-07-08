@@ -7,8 +7,6 @@ Key features:
 - those graphs are cached and are updated once a day;  
 - all API requests, Telegram commands and *apscheduler* tasks are **asynchronous**.
 
-You can try this bot right now: @weather2718_bot
-
 ## How to deploy
 
 
